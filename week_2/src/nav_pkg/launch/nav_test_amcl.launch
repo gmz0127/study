@@ -1,0 +1,14 @@
+<launch>
+    <!--amcl不能独立运行，依赖仿真环境-->
+    <include file="$(find wpr_simulation)/launch/wpb_stage_robocup.launch"/>
+    
+    <!--启动地图服务，加载地图-->
+    <include file="$(find nav_pkg)/launch/nav_mapserver.launch"/>
+
+    <!--启动rviz(同时启动gzabe,vm卡顿，需要在终端启动)-->
+
+    <!--启动amcl文件-->
+    <include file="$(find nav_pkg)/launch/nav_amcl.launch"/>
+    
+
+</launch>

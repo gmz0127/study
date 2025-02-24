@@ -1,0 +1,13 @@
+<launch>
+
+    <!--设置加载文件地址参数-->
+    <arg name="filename" default="$(find nav_pkg)/map/nav.yaml"/>
+
+    <!--启动map_server节点-->
+    <node pkg="map_server" name="map_server" type="map_server" args="$(arg filename)"/>
+    
+    <!--启动rviz,订阅/map话题，显示全局地图-->
+    <node pkg="rviz" name="rviz" type="rviz"/>
+
+
+</launch>

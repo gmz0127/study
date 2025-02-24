@@ -1,0 +1,9 @@
+<launch>
+
+    <!--设置参数：保存地图的地址-->
+    <arg name="file" value="$(find nav_pkg)/map/nav"/>
+
+    <!--启动map_saver节点，传入保存地图的路径-->
+    <node pkg="map_server" name="map_saver" type="map_saver" args="-f $(arg file)"/>
+
+</launch>
