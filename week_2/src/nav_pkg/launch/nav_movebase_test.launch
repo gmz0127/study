@@ -1,0 +1,11 @@
+<launch>
+	<!--启动地图服务，获取全局地图-->
+	<include file="$(find nav_pkg)/launch/nav_mapserver.launch"/>
+	
+	<!--启动amcl开启自我定位-->
+	<include file="$(find nav_pkg)/launch/nav_amcl.launch"/>
+	
+	<!--启动move_base进行路径规划-->
+	<include file="$(find nav_pkg)/launch/nav_movebase.launch"/>
+	
+</launch>
