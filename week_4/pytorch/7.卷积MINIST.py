@@ -4,6 +4,13 @@ from torch.utils.data import DataLoader
 from torchvision import transforms,datasets
 
 """
+出现的问题
+1.reshape不能改变原数据形状，他只是返回一个副本，所以在y_hat2.reshape的时候需要用一个变量接收，
+或者直接放到线形层中
+2.学习率，使用Aadm优化器，刚开始传入的学习率是0.01，准确率非常低，后面改成0.001才达到95%以上
+
+"""
+"""
 1.此时读取到的手写数字图片是一个PIL数据类型的数组，所以在dataset阶段
 要使用数据预处理，把PIL转换为Tensor张量，transforms = transforms.ToTensor()
 
