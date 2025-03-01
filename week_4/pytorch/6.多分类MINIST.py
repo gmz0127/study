@@ -12,8 +12,12 @@ from torchvision import transforms,datasets
  nn.Sigmoid()
 * 输出层激活函数
  nn.Softmax()
-* 多分类损失函数
+* 多分类损失函数：交叉熵损失
  nn.CrossEntropLoss()
+ 内部封装了softmax-loss-on_hot流程，实现了对输入特征进行softmax的多分类概率计算，
+ 然后将输入的target转变为one_hot编码，进行损失计算,这样就不需要拿到target后还要变为ont_hot才能计算损失
+ 
+ 
 * 计算损失的时候使用one-hot编码
  target = 2,但是预测的结果是对多分类的概率
  假设为四分类，target=2,则他应该对应one-hot编码tensor([[0,0,1,0]) 
@@ -45,7 +49,7 @@ class mymodule(nn.Module):
         self.linear2 = nn.Linear(512,256)
         self.linear3 = nn.Linear(256,128)
         self.linear4 = nn.Linear(128,10)
-        self.sigmoid = nn.Sigmoid()
+        self.sigmoid = nn.ReLU()
         # 对列数据进行softmax
         self.softmax = nn.Softmax(dim=1)
 
@@ -56,8 +60,6 @@ class mymodule(nn.Module):
         y_hat2 = self.sigmoid(self.linear2(y_hat1))
         y_hat3 = self.sigmoid(self.linear3(y_hat2))
         y_hat4 = self.sigmoid(self.linear4(y_hat3))
-
-        # 输出层，转换为概率
         y_pred = self.softmax(y_hat4)
 
         return y_pred
@@ -69,30 +71,31 @@ model = mymodule()
 CrossentropLoss = nn.CrossEntropyLoss()
 
 # 优化器
-Adam = optim.Adam(model.parameters(),lr=0.01)
+SGD = optim.SGD(model.parameters(),lr=0.1,momentum=0.5)
 
 # 训练
 def Train():
-    for x,y in Traindataloader:
+    for i,(x,y) in enumerate(Traindataloader):
         y_pre = model(x)
         loss = CrossentropLoss(y_pre,y)
         loss.backward()
-        Adam.step()
-        Adam.zero_grad()
+        SGD.step()
+        SGD.zero_grad()
 
 # 测试
 def Test():
     total = 0
     correct = 0
     with torch.no_grad():
-        for x,y in Testdataloader:
+        for (x,y) in Testdataloader:
             y_pred = model(x)
-            _,pred_num = torch.max(y_pred,dim=1)
+            _,pred_num = torch.max(y_pred.data,dim=1)
             correct += ((pred_num == y).sum().item())
             total += x.shape[0]
     print(f"准确率：{100*correct/total}")
 
 epoachs = 20
+
 if __name__ == "__main__":
     for epoach in range(epoachs):
         print(f"第{epoach + 1}次训练")
