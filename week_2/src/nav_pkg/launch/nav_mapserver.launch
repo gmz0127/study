@@ -1,9 +1,0 @@
-<launch>
-
-    <!--设置加载文件地址参数-->
-    <arg name="filename" default="$(find nav_pkg)/map/nav.yaml"/>
-
-    <!--启动map_server节点-->
-    <node pkg="map_server" name="map_server" type="map_server" args="$(arg filename)"/>
-
-</launch>
